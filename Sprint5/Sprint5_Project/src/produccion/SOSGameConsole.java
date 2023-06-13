@@ -65,27 +65,15 @@ public class SOSGameConsole {
         while(!board.isBoardFull()) {
             displayBoard();
             System.out.println("Es el turno del jugador " + board.getActivePlayer().getName() + ".");
-            int row, column;
-            SOSGameBoard.Box chosen;
+            int row = 0, column = 0;
+            SOSGameBoard.Box chosen = null;
 
             /*HUMAN PLAYS*/
             if (board.getActivePlayer().getControl() == 'H') {
-                do {
-                    System.out.println("Ingrese la fila de su jugada: ");
-                    row = inRead.nextInt();
-
-                    System.out.println("Ingrese la columna de su jugada");
-                    column = inRead.nextInt();
-
-                    if (board.getBox(row, column) == null || board.getBox(row, column) != SOSGameBoard.Box.EMPTY) {
-                        System.out.println("Ingrese numeros validos");
-                    }
-                } while (board.getBox(row, column) == null || board.getBox(row, column) != SOSGameBoard.Box.EMPTY);
-
-                System.out.println("Ingrese el caracter que desea ingresar, sea S o O");
-                char chosenChar = inRead.next().charAt(0);
-                chosen = chosenChar == 'S' ? SOSGameBoard.Box.LETTER_S : SOSGameBoard.Box.LETTER_O;
-                board.makePlay(row, column, chosen);
+                int[] parameters = board.humanPlay();
+                row = parameters[0];
+                column = parameters[1];
+                chosen = parameters[2] == 0 ? SOSGameBoard.Box.LETTER_O : SOSGameBoard.Box.LETTER_S;
 
             /*COMPUTER PLAYS*/
             } else {
@@ -106,7 +94,7 @@ public class SOSGameConsole {
                 return;
             }
 
-            /*End of turn on a GENERAL game and SIMPLE game*/
+            /*End of turn on a GENERAL/SIMPLE game*/
             if (board.atLeastOneSOS(row, column, chosen)) {
                 int pointsEarned = board.howManySOS(row, column, chosen);
                 board.getActivePlayer().increaseScore(pointsEarned);

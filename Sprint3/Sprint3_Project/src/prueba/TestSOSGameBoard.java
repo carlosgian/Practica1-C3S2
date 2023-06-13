@@ -22,12 +22,10 @@ public class TestSOSGameBoard {
             }
         }
     }
-
     @Test
     public void testInvalidRow(){
         assertEquals(null, board.getCell(sideLength,1));
     }
-
     //Criterio de Aceptacion 1.3
     @Test
     public void testInvalidColumn(){
