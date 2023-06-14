@@ -75,7 +75,7 @@ public class SOSGameConsole {
                 chosen = chosenChar == 'O' ? SOSGameBoard.Box.LETTER_O : SOSGameBoard.Box.LETTER_S;
                 board.makePlay(row, column, chosen);
                 displayBoard();
-                SOSGameBoard.Player current = playerName == "BluePlayer" ? board.getPlayers()[0]:board.getPlayers()[1];
+                SOSGameBoard.Player current = playerName.equals("BluePlayer") ? board.getPlayers()[0]:board.getPlayers()[1];
                 int pointsEarned = board.howManySOS(row, column, chosen);
                 current.increaseScore(pointsEarned);
                 System.out.println("El jugador " + current.getName() + " gano " + pointsEarned + " en este turno.");
