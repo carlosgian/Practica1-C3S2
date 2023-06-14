@@ -1,4 +1,6 @@
 package produccion;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,6 +33,23 @@ public class SOSGameConsole {
     private void printPlays(){
         for ( SavedPlays sp : arrayOfPlays){
             sp.printPlay();
+        }
+    }
+
+    private void writePlaysToFile(){
+        try {
+            FileWriter myWriter = new FileWriter("solution.txt");
+
+            for ( SavedPlays sp : arrayOfPlays){
+                myWriter.write(sp.returnPlay());
+                myWriter.write("\n");
+            }
+            myWriter.close();
+
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
     }
 
@@ -118,7 +137,7 @@ public class SOSGameConsole {
     public static void main(String[] args) {
         SOSGameConsole ConsoleOne = new SOSGameConsole(new SOSGameBoard());
         ConsoleOne.play();
-        ConsoleOne.printPlays();
+        ConsoleOne.writePlaysToFile();
 
     }
 }

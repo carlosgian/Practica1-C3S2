@@ -29,4 +29,8 @@ public class SavedPlays {
     public void setSymbol(){
 
     }*/
+
+    public String returnPlay(){
+        return player_name + " " + row + " " + column + " " + symbol + " " + pointsEarned;
+    }
 }
