@@ -1,4 +1,6 @@
 package produccion;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,10 +41,11 @@ public class SOSGameConsole {
     private void writePlaysToFile(){
         try {
             FileWriter myWriter = new FileWriter("solution.txt");
-
+            myWriter.write(String.valueOf(board.getSquaresPerSide()));
+            myWriter.write(" " + board.getGameType() + "\n");
             for ( SavedPlays sp : arrayOfPlays){
                 myWriter.write(sp.returnPlay());
-                myWriter.write("\n");
+                if (arrayOfPlays.indexOf(sp) != arrayOfPlays.size() - 1) myWriter.write("\n");
             }
             myWriter.close();
 
@@ -51,6 +54,43 @@ public class SOSGameConsole {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    public void readPlaysFromFile(File playList) {
+        try {
+            //= new File("solution.txt");
+            Scanner fileReader = new Scanner(playList);
+            SOSGameBoard.Box chosen = null;
+            int column = 0;
+            int row = 0;
+            int size = fileReader.nextInt();
+            char gType = fileReader.next().charAt(0);
+            board = new SOSGameBoard(size, gType);
+            board.initBoard();
+            while (fileReader.hasNextLine()) {
+                String playerName = fileReader.next();
+                row = fileReader.nextInt();
+                column = fileReader.nextInt();
+                char chosenChar = fileReader.next().charAt(0);
+                chosen = chosenChar == 'O' ? SOSGameBoard.Box.LETTER_O : SOSGameBoard.Box.LETTER_S;
+                board.makePlay(row, column, chosen);
+                displayBoard();
+                SOSGameBoard.Player current = playerName == "BluePlayer" ? board.getPlayers()[0]:board.getPlayers()[1];
+                int pointsEarned = board.howManySOS(row, column, chosen);
+                current.increaseScore(pointsEarned);
+                System.out.println("El jugador " + current.getName() + " gano " + pointsEarned + " en este turno.");
+            }
+            SOSGameBoard.Player winner = board.getWinner();
+            if ( board.getWinner() != null) System.out.println("El ganador es " + winner.getName() + " con " + winner.getScore() + " puntos.");
+            else System.out.println("El juego termina en empate!");
+            fileReader.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Ocurrió un error.");
+            e.printStackTrace();
+        }
+        //System.out.println(data1);
+        //System.out.println(data2);
     }
 
     public void play(){
@@ -135,9 +175,23 @@ public class SOSGameConsole {
     }
 
     public static void main(String[] args) {
-        SOSGameConsole ConsoleOne = new SOSGameConsole(new SOSGameBoard());
-        ConsoleOne.play();
-        ConsoleOne.writePlaysToFile();
+        SOSGameBoard boardOne = new SOSGameBoard();
+        SOSGameConsole consoleOne = new SOSGameConsole(boardOne);
+        consoleOne.play();
+        consoleOne.writePlaysToFile();
+
+        File playList = new File("solution.txt");
+
+        //SOSGameBoard boardTwo = new SOSGameBoard(4, 'G');
+        System.out.println("Desea ver un replay del ultimo juego? ");
+        Scanner scan = new Scanner(System.in);
+        boolean flag = scan.nextBoolean();
+
+        if(flag){
+            SOSGameConsole consoleTwo = new SOSGameConsole(new SOSGameBoard());
+            consoleTwo.readPlaysFromFile(playList);
+        }
+        else System.out.println("Hasta la próxima.");
 
     }
 }

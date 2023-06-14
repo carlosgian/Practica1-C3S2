@@ -18,19 +18,8 @@ public class SavedPlays {
     public void printPlay(){
         System.out.println(player_name + " " + row + " " + column + " " + symbol + " " + pointsEarned);
     }
-    /*public void setPlayer_name(){
-
-    }
-
-    public void setPos(){
-
-    }
-
-    public void setSymbol(){
-
-    }*/
 
     public String returnPlay(){
-        return player_name + " " + row + " " + column + " " + symbol + " " + pointsEarned;
+        return player_name + " " + row + " " + column + " " + symbol;
     }
 }

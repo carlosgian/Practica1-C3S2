@@ -1,5 +1,7 @@
 package produccion;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -128,6 +130,8 @@ public class SOSGameBoard {
         }
         return parameters;
     }
+
+
 
     public void changeActivePlayer(){
         activePlayer = ( getActivePlayer() == players[0] ) ? players[1]:players[0];
